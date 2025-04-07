@@ -24,6 +24,7 @@ export function PromptInput({
           value={prompt}
           onChange={onPromptChange}
           className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+          disabled={loading}
         />
         <Button
           onClick={onGenerate}
@@ -33,13 +34,18 @@ export function PromptInput({
           {loading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Generating
+              Processing
             </>
           ) : (
             "Generate"
           )}
         </Button>
       </div>
+      {loading && (
+        <div className="mt-2 text-sm text-gray-400">
+          Your image is being generated. This may take a few moments...
+        </div>
+      )}
     </div>
   );
 }

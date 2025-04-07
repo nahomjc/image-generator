@@ -1,14 +1,13 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
-// Configure OpenAI with a shorter timeout for Vercel
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-  timeout: 80000, // 8 seconds timeout to stay under Vercel's 10s limit
+  timeout: 60000,
 });
 
-// Configure Vercel settings
-export const maxDuration = 10;
+export const runtime = "edge";
+export const maxDuration = 60;
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
@@ -29,23 +28,14 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create a timeout promise
-    const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => {
-        reject(new Error("Request timeout"));
-      }, 80000); // 8 second timeout
-    });
-
     try {
-      const response = (await Promise.race([
-        openai.images.generate({
-          model: "dall-e-2",
-          prompt: prompt,
-          n: 4,
-          size: "1024x1024",
-        }),
-        timeoutPromise,
-      ])) as OpenAI.Images.ImagesResponse;
+      const response = await openai.images.generate({
+        model: "dall-e-2",
+        prompt: prompt,
+        n: 4,
+        size: "1024x1024",
+        response_format: "url",
+      });
 
       if (!response.data || !Array.isArray(response.data)) {
         return NextResponse.json(
@@ -63,16 +53,7 @@ export async function POST(request: Request) {
     } catch (error: any) {
       console.error("OpenAI API Error:", error);
 
-      if (error.message === "Request timeout") {
-        return NextResponse.json(
-          {
-            error:
-              "Request timed out. The image generation is taking too long. Please try again with a simpler prompt.",
-          },
-          { status: 504 }
-        );
-      }
-
+      // Handle specific OpenAI API errors
       if (error.code === "content_policy_violation") {
         return NextResponse.json(
           {
@@ -84,6 +65,30 @@ export async function POST(request: Request) {
         );
       }
 
+      // Handle rate limit errors
+      if (error.code === "rate_limit_exceeded") {
+        return NextResponse.json(
+          {
+            error: "Rate limit exceeded. Please try again in a few moments.",
+            details: error.message,
+          },
+          { status: 429 }
+        );
+      }
+
+      // Handle timeout errors
+      if (error.code === "timeout" || error.message?.includes("timeout")) {
+        return NextResponse.json(
+          {
+            error:
+              "The request took too long to process. Please try a simpler prompt or try again later.",
+            details: error.message,
+          },
+          { status: 504 }
+        );
+      }
+
+      // Handle other OpenAI API errors
       if (error.response) {
         return NextResponse.json(
           {
@@ -94,15 +99,22 @@ export async function POST(request: Request) {
         );
       }
 
+      // Handle any other errors
       return NextResponse.json(
-        { error: "Failed to generate images", details: error.message },
+        {
+          error: "Failed to generate images",
+          details: error.message || "Unknown error occurred",
+        },
         { status: 500 }
       );
     }
   } catch (error: any) {
     console.error("Error in generate route:", error);
     return NextResponse.json(
-      { error: "Failed to process request", details: error.message },
+      {
+        error: "Failed to process request",
+        details: error.message || "Unknown error occurred",
+      },
       { status: 500 }
     );
   }
