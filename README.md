@@ -56,8 +56,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [Next.js](https://nextjs.org/) - The React framework for production
 - [TypeScript](https://www.typescriptlang.org/) - For type safety and better development experience
 - [Tailwind CSS](https://tailwindcss.com/) - For styling
-- [Radix UI](https://www.radix-ui.com/) - For unstyled, accessible UI primitives
-- [shadcn/ui](https://ui.shadcn.com/) - For beautiful, pre-styled components built on Radix UI
+- [shadcn/ui](https://ui.shadcn.com/) - For beautiful, accessible UI components
 - [DALL-E API](https://openai.com/dall-e-2) - For AI image generation
 
 ## 📝 Usage
@@ -116,8 +115,6 @@ If you have any questions or need help, please:
 ## 🙏 Acknowledgments
 
 - Thanks to OpenAI for the DALL-E API
-- Thanks to Unsplash for their image API
-- Thanks to all contributors who have helped this project grow
 
 ---
 
