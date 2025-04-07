@@ -5,7 +5,6 @@ A modern web application built with Next.js that allows users to generate and cu
 ## ✨ Features
 
 - 🎨 AI-powered image generation using DALL-E
-- 🖼️ High-quality image search through Unsplash integration
 - 🎯 Customizable image generation parameters
 - 📱 Responsive design for all devices
 - ⚡ Fast and optimized performance
