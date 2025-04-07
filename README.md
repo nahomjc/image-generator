@@ -118,4 +118,4 @@ If you have any questions or need help, please:
 
 ---
 
-Made with ❤️ by Nahom tesaye
+Made with ❤️ by Nahom Tesfaye
