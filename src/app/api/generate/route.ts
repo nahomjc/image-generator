@@ -4,7 +4,7 @@ import OpenAI from "openai";
 // Configure OpenAI with a shorter timeout for Vercel
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-  timeout: 5000, // 5 seconds timeout to stay well under Vercel's 10s limit
+  timeout: 10000, // 8 seconds timeout to stay under Vercel's 10s limit
 });
 
 // Configure Vercel settings
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
     const timeoutPromise = new Promise((_, reject) => {
       setTimeout(() => {
         reject(new Error("Request timeout"));
-      }, 5000); // 5 second timeout
+      }, 10000); // 8 second timeout
     });
 
     try {
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
         openai.images.generate({
           model: "dall-e-2",
           prompt: prompt,
-          n: 2, // Reduce number of images to speed up response
+          n: 1, // Generate only 1 image to reduce processing time
           size: "1024x1024",
         }),
         timeoutPromise,
@@ -67,7 +67,8 @@ export async function POST(request: Request) {
       if (error.message === "Request timeout") {
         return NextResponse.json(
           {
-            error: "Request timed out. Please try again with a simpler prompt.",
+            error:
+              "Request timed out. The image generation is taking too long. Please try again with a simpler prompt.",
           },
           { status: 504 }
         );
