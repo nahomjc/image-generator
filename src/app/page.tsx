@@ -36,7 +36,15 @@ export default function Home() {
         body: JSON.stringify({ prompt }),
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        console.error("Error parsing response:", parseError);
+        throw new Error(
+          "Server response was not valid JSON. The request may have timed out."
+        );
+      }
 
       if (!response.ok) {
         throw new Error(data.error || "Failed to generate images");

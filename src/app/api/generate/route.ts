@@ -4,12 +4,12 @@ import OpenAI from "openai";
 // Configure OpenAI with a shorter timeout for Vercel
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-  timeout: 10000, // 8 seconds timeout to stay under Vercel's 10s limit
+  timeout: 80000, // 8 seconds timeout to stay under Vercel's 10s limit
 });
 
 // Configure Vercel settings
-export const maxDuration = 10; // Set max duration for Vercel
-export const dynamic = "force-dynamic"; // Disable caching
+export const maxDuration = 10;
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
@@ -33,16 +33,15 @@ export async function POST(request: Request) {
     const timeoutPromise = new Promise((_, reject) => {
       setTimeout(() => {
         reject(new Error("Request timeout"));
-      }, 10000); // 8 second timeout
+      }, 80000); // 8 second timeout
     });
 
     try {
-      // Race between the OpenAI request and the timeout
       const response = (await Promise.race([
         openai.images.generate({
           model: "dall-e-2",
           prompt: prompt,
-          n: 1, // Generate only 1 image to reduce processing time
+          n: 4,
           size: "1024x1024",
         }),
         timeoutPromise,
@@ -100,10 +99,10 @@ export async function POST(request: Request) {
         { status: 500 }
       );
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error in generate route:", error);
     return NextResponse.json(
-      { error: "Failed to process request" },
+      { error: "Failed to process request", details: error.message },
       { status: 500 }
     );
   }
