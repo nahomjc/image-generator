@@ -118,17 +118,22 @@ export default function Home() {
           selectedImage={selectedImage}
           onSelectImage={setSelectedImage}
           onDownloadImage={handleDownloadClick}
+          loading={loading}
         />
 
-        {selectedImage && (
-          <div className="text-center">
+        {images.length > 0 && !loading && (
+          <div className="text-center space-y-4">
             <Button
               variant="outline"
               onClick={() => generateImages()}
-              className="mt-8 bg-white/5 hover:bg-white/10 text-white border-white/10 hover:border-white/20"
+              className="bg-white/5 hover:bg-white/10 text-white border-white/10 hover:border-white/20"
             >
               Generate More Like This
             </Button>
+            <p className="text-sm text-gray-400">
+              Click on an image to select it, or use the download button to save
+              your favorite generations.
+            </p>
           </div>
         )}
 

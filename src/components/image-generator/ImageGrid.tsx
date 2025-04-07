@@ -1,5 +1,6 @@
 import { MouseEvent } from "react";
 import { ImageCard } from "./ImageCard";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface GeneratedImage {
   url: string;
@@ -11,6 +12,7 @@ interface ImageGridProps {
   selectedImage: GeneratedImage | null;
   onSelectImage: (image: GeneratedImage) => void;
   onDownloadImage: (url: string, e: MouseEvent<HTMLButtonElement>) => void;
+  loading?: boolean;
 }
 
 export function ImageGrid({
@@ -18,7 +20,20 @@ export function ImageGrid({
   selectedImage,
   onSelectImage,
   onDownloadImage,
+  loading = false,
 }: ImageGridProps) {
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[...Array(4)].map((_, index) => (
+          <div key={index} className="relative w-full h-64">
+            <Skeleton className="w-full h-full rounded-lg" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   if (images.length === 0) return null;
 
   return (
