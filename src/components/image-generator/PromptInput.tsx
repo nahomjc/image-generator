@@ -66,12 +66,12 @@ export function PromptInput({
       {showExamples && (
         <div className="mt-4 space-y-2">
           <p className="text-sm text-gray-400">Try these detailed examples:</p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2  ">
             {EXAMPLE_PROMPTS.map((example, index) => (
               <Badge
                 key={index}
                 variant="secondary"
-                className="cursor-pointer hover:bg-white/20 transition-colors"
+                className="cursor-pointer hover:bg-white/20 transition-colors overflow-hidden text-ellipsis max-w-full pl-4 pr-3 py-1 text-left"
                 onClick={() => {
                   onPromptChange({
                     target: { value: example },
@@ -79,7 +79,7 @@ export function PromptInput({
                   setShowExamples(false);
                 }}
               >
-                {example}
+                <span className="text-left block truncate">{example}</span>
               </Badge>
             ))}
           </div>
