@@ -179,7 +179,7 @@ export default function Home() {
             AI Image Generator
           </h1>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Transform your ideas into stunning visuals with DALL-E 3
+            Transform your ideas into stunning visuals with DALL-E 2
           </p>
           <p className="text-sm text-gray-400">
             Powered by OpenAI's most advanced image generation model
