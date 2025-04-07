@@ -41,10 +41,10 @@ export function PromptInput({
           <Button
             variant="ghost"
             size="icon"
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-500"
             onClick={() => setShowExamples(!showExamples)}
           >
-            <Sparkles className="h-4 w-4" />
+            <Sparkles className="h-4 w-4 hover:text-blue-500" />
           </Button>
         </div>
         <Button
