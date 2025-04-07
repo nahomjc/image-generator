@@ -27,6 +27,8 @@ export default function Home() {
     if (!prompt) return;
     setLoading(true);
     setError(null);
+    setImages([]);
+
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
@@ -36,15 +38,7 @@ export default function Home() {
         body: JSON.stringify({ prompt }),
       });
 
-      let data;
-      try {
-        data = await response.json();
-      } catch (parseError) {
-        console.error("Error parsing response:", parseError);
-        throw new Error(
-          "Server response was not valid JSON. The request may have timed out."
-        );
-      }
+      const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data.error || "Failed to generate images");
@@ -55,7 +49,7 @@ export default function Home() {
       }
 
       setImages(data.images);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error generating images:", error);
       setError(
         error instanceof Error
