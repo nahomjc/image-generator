@@ -36,13 +36,17 @@ export default function Home() {
         body: JSON.stringify({ prompt }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to generate images");
+        throw new Error(data.error || "Failed to generate images");
       }
 
-      const data = await response.json();
-      setImages(data);
+      if (!data.images || !Array.isArray(data.images)) {
+        throw new Error("Invalid response format from server");
+      }
+
+      setImages(data.images);
     } catch (error) {
       console.error("Error generating images:", error);
       setError(

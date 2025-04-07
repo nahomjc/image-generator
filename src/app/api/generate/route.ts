@@ -16,6 +16,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (!process.env.OPENAI_API_KEY) {
+      return NextResponse.json(
+        { error: "OpenAI API key is not configured" },
+        { status: 500 }
+      );
+    }
+
     try {
       const response = await openai.images.generate({
         model: "dall-e-2",
@@ -24,13 +31,22 @@ export async function POST(request: Request) {
         size: "1024x1024",
       });
 
+      if (!response.data || !Array.isArray(response.data)) {
+        return NextResponse.json(
+          { error: "Invalid response from OpenAI API" },
+          { status: 500 }
+        );
+      }
+
       const images = response.data.map((image) => ({
         url: image.url,
         revised_prompt: prompt,
       }));
 
-      return NextResponse.json(images);
+      return NextResponse.json({ images });
     } catch (error: any) {
+      console.error("OpenAI API Error:", error);
+
       if (error.code === "content_policy_violation") {
         return NextResponse.json(
           {
@@ -41,12 +57,26 @@ export async function POST(request: Request) {
           { status: 400 }
         );
       }
-      throw error;
+
+      if (error.response) {
+        return NextResponse.json(
+          {
+            error: "OpenAI API Error",
+            details: error.response.data,
+          },
+          { status: error.response.status || 500 }
+        );
+      }
+
+      return NextResponse.json(
+        { error: "Failed to generate images", details: error.message },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error("Error in generate route:", error);
     return NextResponse.json(
-      { error: "Failed to generate images" },
+      { error: "Failed to process request" },
       { status: 500 }
     );
   }
