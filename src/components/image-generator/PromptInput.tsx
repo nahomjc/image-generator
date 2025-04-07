@@ -1,8 +1,9 @@
 import { ChangeEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Loader2, Sparkles } from "lucide-react";
+import { Loader2, Sparkles, ChevronDown, ChevronUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 const EXAMPLE_PROMPTS = [
   "A photorealistic portrait of a woman with flowing golden hair, standing in a field of wildflowers at sunset, cinematic lighting",
@@ -25,6 +26,12 @@ export function PromptInput({
   onGenerate,
 }: PromptInputProps) {
   const [showExamples, setShowExamples] = useState(false);
+  const [expandedExamples, setExpandedExamples] = useState(false);
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const visibleExamples =
+    isMobile && !expandedExamples
+      ? EXAMPLE_PROMPTS.slice(0, 2)
+      : EXAMPLE_PROMPTS;
 
   return (
     <div className="w-full max-w-3xl mx-auto bg-white/5 p-4 rounded-lg backdrop-blur-sm border border-white/10 shadow-xl">
@@ -65,13 +72,38 @@ export function PromptInput({
 
       {showExamples && (
         <div className="mt-4 space-y-2">
-          <p className="text-sm text-gray-400">Try these detailed examples:</p>
-          <div className="flex flex-wrap gap-2  ">
-            {EXAMPLE_PROMPTS.map((example, index) => (
+          <div className="flex justify-between items-center">
+            <p className="text-sm text-gray-400">
+              Try these detailed examples:
+            </p>
+            {isMobile && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-xs text-blue-400 hover:text-blue-300"
+                onClick={() => setExpandedExamples(!expandedExamples)}
+              >
+                {expandedExamples ? (
+                  <>
+                    Show less <ChevronUp className="ml-1 h-3 w-3" />
+                  </>
+                ) : (
+                  <>
+                    Show more <ChevronDown className="ml-1 h-3 w-3" />
+                  </>
+                )}
+              </Button>
+            )}
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {visibleExamples.map((example, index) => (
               <Badge
                 key={index}
                 variant="secondary"
-                className="cursor-pointer hover:bg-white/20 transition-colors overflow-hidden text-ellipsis max-w-full pl-4 pr-3 py-1 text-left"
+                className={cn(
+                  "cursor-pointer hover:bg-white/20 transition-all duration-200 overflow-hidden text-ellipsis pl-4 pr-3 py-2 text-left max-w-full",
+                  prompt === example && "ring-2 ring-blue-500 bg-blue-900/30"
+                )}
                 onClick={() => {
                   onPromptChange({
                     target: { value: example },

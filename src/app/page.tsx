@@ -206,7 +206,12 @@ export default function Home() {
         />
 
         {images.length > 0 && !loading && (
-          <div className="text-center space-y-4">
+          <motion.div
+            className="text-center space-y-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+          >
             <Button
               variant="outline"
               onClick={() => generateImages()}
@@ -216,9 +221,10 @@ export default function Home() {
             </Button>
             <p className="text-sm text-gray-400">
               Click on an image to select it, or use the download button to save
-              your favorite generations.
+              your favorite generations. Try the new fullscreen viewer with zoom
+              capabilities!
             </p>
-          </div>
+          </motion.div>
         )}
 
         <DownloadDialog

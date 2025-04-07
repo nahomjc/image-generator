@@ -1,6 +1,8 @@
-import { MouseEvent } from "react";
+import { MouseEvent, useState } from "react";
 import { ImageCard } from "./ImageCard";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ImageViewer } from "./ImageViewer";
+import { motion } from "framer-motion";
 
 interface GeneratedImage {
   url: string;
@@ -22,6 +24,28 @@ export function ImageGrid({
   onDownloadImage,
   loading = false,
 }: ImageGridProps) {
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [viewerIndex, setViewerIndex] = useState(0);
+
+  const handleViewFullscreen = (index: number) => {
+    setViewerIndex(index);
+    setViewerOpen(true);
+  };
+
+  const handleCloseViewer = () => {
+    setViewerOpen(false);
+  };
+
+  const handleDownloadFromViewer = (url: string) => {
+    // Create a synthetic event for the download handler
+    const syntheticEvent = {
+      stopPropagation: () => {},
+    } as MouseEvent<HTMLButtonElement>;
+
+    onDownloadImage(url, syntheticEvent);
+    setViewerOpen(false);
+  };
+
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -37,16 +61,45 @@ export function ImageGrid({
   if (images.length === 0) return null;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {images.map((image, index) => (
-        <ImageCard
-          key={index}
-          image={image}
-          isSelected={selectedImage?.url === image.url}
-          onSelect={() => onSelectImage(image)}
-          onDownload={onDownloadImage}
-        />
-      ))}
-    </div>
+    <>
+      <motion.div
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {images.map((image, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: 0.3,
+              delay: index * 0.1,
+              type: "spring",
+              stiffness: 200,
+              damping: 20,
+            }}
+          >
+            <ImageCard
+              image={image}
+              isSelected={selectedImage?.url === image.url}
+              onSelect={() => onSelectImage(image)}
+              onDownload={onDownloadImage}
+              onViewFullscreen={() => handleViewFullscreen(index)}
+              index={index}
+            />
+          </motion.div>
+        ))}
+      </motion.div>
+
+      <ImageViewer
+        images={images}
+        initialImageIndex={viewerIndex}
+        isOpen={viewerOpen}
+        onClose={handleCloseViewer}
+        onDownload={handleDownloadFromViewer}
+      />
+    </>
   );
 }
