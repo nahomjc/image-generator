@@ -5,10 +5,10 @@ import { Loader2, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const EXAMPLE_PROMPTS = [
-  "A serene landscape with mountains at sunset",
-  "A futuristic city with flying cars",
-  "A magical forest with glowing mushrooms",
-  "A cute robot playing with a cat",
+  "A photorealistic portrait of a woman with flowing golden hair, standing in a field of wildflowers at sunset, cinematic lighting",
+  "A detailed architectural visualization of a futuristic city with flying cars and holographic advertisements, ray-traced reflections",
+  "A magical forest scene with bioluminescent plants and floating lanterns, atmospheric lighting, fantasy art style",
+  "A cute robot playing with a cat in a cozy living room, warm lighting, Pixar-style animation",
 ];
 
 interface PromptInputProps {
@@ -31,7 +31,7 @@ export function PromptInput({
       <div className="flex gap-4">
         <div className="flex-1 relative">
           <Input
-            placeholder="Describe the image you want to generate..."
+            placeholder="Describe your image in detail... (DALL-E 3 works best with detailed descriptions)"
             value={prompt}
             onChange={onPromptChange}
             className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-gray-400 pr-10"
@@ -65,7 +65,7 @@ export function PromptInput({
 
       {showExamples && (
         <div className="mt-4 space-y-2">
-          <p className="text-sm text-gray-400">Try these examples:</p>
+          <p className="text-sm text-gray-400">Try these detailed examples:</p>
           <div className="flex flex-wrap gap-2">
             {EXAMPLE_PROMPTS.map((example, index) => (
               <Badge
@@ -88,7 +88,8 @@ export function PromptInput({
 
       {loading && (
         <div className="mt-2 text-sm text-gray-400">
-          Your image is being generated. This may take a few moments...
+          Your image is being generated with DALL-E 3. This may take a few
+          moments...
         </div>
       )}
     </div>

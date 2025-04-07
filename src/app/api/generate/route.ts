@@ -30,10 +30,12 @@ export async function POST(request: Request) {
 
     try {
       const response = await openai.images.generate({
-        model: "dall-e-2",
+        model: "dall-e-3",
         prompt: prompt,
         n: 4,
         size: "1024x1024",
+        quality: "standard",
+        style: "vivid",
         response_format: "url",
       });
 
@@ -46,7 +48,7 @@ export async function POST(request: Request) {
 
       const images = response.data.map((image: OpenAI.Images.Image) => ({
         url: image.url,
-        revised_prompt: prompt,
+        revised_prompt: image.revised_prompt || prompt,
       }));
 
       return NextResponse.json({ images });
@@ -112,7 +114,7 @@ export async function POST(request: Request) {
     console.error("Error in generate route:", error);
     return NextResponse.json(
       {
-        error: "Failed to process request",
+        error: "Internal server error",
         details: error.message || "Unknown error occurred",
       },
       { status: 500 }
