@@ -5,7 +5,6 @@ A modern web application built with Next.js that allows users to generate and cu
 ## ✨ Features
 
 - 🎨 AI-powered image generation using DALL-E
-- 🖼️ High-quality image search through Unsplash integration
 - 🎯 Customizable image generation parameters
 - 📱 Responsive design for all devices
 - ⚡ Fast and optimized performance
@@ -72,29 +71,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
    - Filter results by orientation, color, or other parameters
    - Click on images to view full details
 
-## 🔧 Configuration
 
-The application can be configured through the `next.config.js` file:
-
-```javascript
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-  images: {
-    domains: ["oaidalleapiprodscus.blob.core.windows.net"],
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-      },
-      {
-        protocol: "https",
-        hostname: "oaidalleapiprodscus.blob.core.windows.net",
-      },
-    ],
-  },
-};
-```
 
 ## 📄 License
 
@@ -102,7 +79,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/yourusername/image-generator/issues).
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/nahomjc/image-generator/issues).
 
 ## 📞 Support
 
