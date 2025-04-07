@@ -1,9 +1,14 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
+// Configure OpenAI with timeout
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
+  timeout: 8000, // 8 seconds timeout to stay under Vercel's 10s limit
 });
+
+export const maxDuration = 10; // Set max duration for Vercel
+export const dynamic = "force-dynamic"; // Disable caching
 
 export async function POST(request: Request) {
   try {
@@ -24,12 +29,17 @@ export async function POST(request: Request) {
     }
 
     try {
-      const response = await openai.images.generate({
-        model: "dall-e-2",
-        prompt: prompt,
-        n: 4,
-        size: "1024x1024",
-      });
+      const response = (await Promise.race([
+        openai.images.generate({
+          model: "dall-e-2",
+          prompt: prompt,
+          n: 4,
+          size: "1024x1024",
+        }),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("Request timeout")), 8000)
+        ),
+      ])) as OpenAI.Images.ImagesResponse;
 
       if (!response.data || !Array.isArray(response.data)) {
         return NextResponse.json(
@@ -38,7 +48,7 @@ export async function POST(request: Request) {
         );
       }
 
-      const images = response.data.map((image) => ({
+      const images = response.data.map((image: OpenAI.Images.Image) => ({
         url: image.url,
         revised_prompt: prompt,
       }));
@@ -46,6 +56,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ images });
     } catch (error: any) {
       console.error("OpenAI API Error:", error);
+
+      if (error.message === "Request timeout") {
+        return NextResponse.json(
+          { error: "Request timed out. Please try again." },
+          { status: 504 }
+        );
+      }
 
       if (error.code === "content_policy_violation") {
         return NextResponse.json(
