@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Image Generator
 
-## Getting Started
+A modern web application built with Next.js that allows users to generate and customize images using AI technology. This project combines the power of DALL-E and Unsplash to provide a seamless image generation experience.
 
-First, run the development server:
+## ✨ Features
+
+- 🎨 AI-powered image generation using DALL-E
+- 🖼️ High-quality image search through Unsplash integration
+- 🎯 Customizable image generation parameters
+- 📱 Responsive design for all devices
+- ⚡ Fast and optimized performance
+- 🔒 Secure API handling
+- 🎭 Modern and intuitive user interface
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18.0 or later
+- npm or yarn package manager
+- API keys for:
+  - OpenAI API (for DALL-E)
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/nahomjc/image-generator.git
+cd image-generator
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Set up environment variables:
+   Create a `.env.local` file in the root directory and add your API keys:
+
+4. Start the development server:
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Built With
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [Next.js](https://nextjs.org/) - The React framework for production
+- [TypeScript](https://www.typescriptlang.org/) - For type safety and better development experience
+- [Tailwind CSS](https://tailwindcss.com/) - For styling
+- [Radix UI](https://www.radix-ui.com/) - For unstyled, accessible UI primitives
+- [shadcn/ui](https://ui.shadcn.com/) - For beautiful, pre-styled components built on Radix UI
+- [DALL-E API](https://openai.com/dall-e-2) - For AI image generation
 
-## Learn More
+## 📝 Usage
 
-To learn more about Next.js, take a look at the following resources:
+1. **Generate Images**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   - Enter your image description in the prompt field
+   - Adjust generation parameters as needed
+   - Click "Generate" to create your image
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. **Search Images**
+   - Use the search bar to find images from Unsplash
+   - Filter results by orientation, color, or other parameters
+   - Click on images to view full details
 
-## Deploy on Vercel
+## 🔧 Configuration
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The application can be configured through the `next.config.js` file:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```javascript
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  images: {
+    domains: ["oaidalleapiprodscus.blob.core.windows.net"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "oaidalleapiprodscus.blob.core.windows.net",
+      },
+    ],
+  },
+};
+```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/yourusername/image-generator/issues).
+
+## 📞 Support
+
+If you have any questions or need help, please:
+
+- Open an issue
+- Contact the maintainers
+- Check the documentation
+
+## 🙏 Acknowledgments
+
+- Thanks to OpenAI for the DALL-E API
+- Thanks to Unsplash for their image API
+- Thanks to all contributors who have helped this project grow
+
+---
+
+Made with ❤️ by Nahom tesaye
