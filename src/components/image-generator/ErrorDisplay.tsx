@@ -21,7 +21,7 @@ export function ErrorDisplay({ error }: ErrorDisplayProps) {
             </span>
           </>
         ) : (
-          "If you're seeing a billing error, please check your OpenAI API key and billing status."
+          "If you're seeing a this error, please check your OpenAI API key ."
         )}
       </p>
     </div>

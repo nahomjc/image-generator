@@ -31,7 +31,7 @@ export function PromptInput({
       <div className="flex gap-4">
         <div className="flex-1 relative">
           <Input
-            placeholder="Describe your image in detail... (DALL-E 3 works best with detailed descriptions)"
+            placeholder="Describe your image in detail... (DALL-E 2 works best with detailed descriptions)"
             value={prompt}
             onChange={onPromptChange}
             className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-gray-400 pr-10"
@@ -88,7 +88,7 @@ export function PromptInput({
 
       {loading && (
         <div className="mt-2 text-sm text-gray-400">
-          Your image is being generated with DALL-E 3. This may take a few
+          Your image is being generated with DALL-E 2. This may take a few
           moments...
         </div>
       )}
