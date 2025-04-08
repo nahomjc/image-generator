@@ -66,11 +66,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
    - Adjust generation parameters as needed
    - Click "Generate" to create your image
 
-2. **Search Images**
-   - Use the search bar to find images from Unsplash
-   - Filter results by orientation, color, or other parameters
-   - Click on images to view full details
-
+  
 
 
 ## 📄 License
