@@ -82,8 +82,7 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 If you have any questions or need help, please:
 
 - Open an issue
-- Contact the maintainers
-- Check the documentation
+
 
 ## 🙏 Acknowledgments
 
